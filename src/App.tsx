@@ -1,26 +1,55 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect } from 'react'
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
 
-function App() {
+import PageRender from './pageRender'
+import Header from './components/global/Header'
+import Footer from './components/global/Footer'
+
+import { Alert } from './components/alert/Alert'
+
+import { refreshToken } from './redux/actions/authAction'
+import { getCategories } from './redux/actions/categoryAction' 
+import { getHomeBlogs } from './redux/actions/blogAction'
+
+import io from 'socket.io-client'
+
+import SocketClient from './socketClient'
+
+import { API_URL } from './utils/config'
+
+const App = () => {
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(refreshToken())
+    dispatch(getCategories())
+    dispatch(getHomeBlogs())
+  },[dispatch])
+
+  useEffect(() => {
+    const socket = io(API_URL)
+    dispatch({ type: 'SOCKET', payload: socket })
+    return () => { socket.close() }
+  },[dispatch])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="container">
+      <SocketClient />
+      <Router>
+        <Alert />
+        <Header />
+
+          <Switch>
+            <Route exact path ="/" component={PageRender} />
+            <Route exact path ="/:page" component={PageRender} />
+            <Route exact path ="/:page/:slug" component={PageRender} />
+          </Switch>
+
+        <Footer />
+      </Router>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App

@@ -1,0 +1,45 @@
+@import '../abstracts/variables';
+
+.auth_page{
+    width: 100%;
+    padding:2.5rem 0;
+    background: rgba($color-white, .2);
+    display: flex;
+    justify-content: center;
+
+    &_box{
+        background: rgba($color-white2, .2);
+        max-width: 400px;
+        width: 100%;
+        border: 1px solid #ddd;
+        padding: 5rem 4rem;
+    }
+
+    input::placeholder{
+        opacity: 0.5;
+        font-size: 80%;
+    }
+
+    a{
+        text-decoration: none;
+        padding: 0.5rem;
+
+        &:hover{
+            text-decoration: underline;
+        }
+    }
+}
+
+.auth_page .pass{
+    position: relative;
+
+    small {
+        position: absolute;
+        top: 50%;
+        right: 5px;
+        transform: translateY(-50%);
+        cursor: pointer;
+        opacity: 0.5;
+    }
+}
+
